@@ -1,34 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req, Res } from '@nestjs/common';
 import { InstallmentsService } from './installments.service';
-import { CreateInstallmentDto } from './dto/create-installment.dto';
-import { UpdateInstallmentDto } from './dto/update-installment.dto';
+import { InstallmentDto } from './dto/installment.dto';
 
 @Controller('installments')
 export class InstallmentsController {
-  constructor(private readonly installmentsService: InstallmentsService) {}
+  constructor(private readonly installmentsService: InstallmentsService) { }
 
-  @Post()
-  create(@Body() createInstallmentDto: CreateInstallmentDto) {
-    return this.installmentsService.create(createInstallmentDto);
+  @Post('/')
+  addInstallment(@Body() InstallmentDto: InstallmentDto, @Req() req, @Res() res) {
+    return this.installmentsService.addInstallment(InstallmentDto, req, res);
   }
 
-  @Get()
-  findAll() {
-    return this.installmentsService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.installmentsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateInstallmentDto: UpdateInstallmentDto) {
-    return this.installmentsService.update(+id, updateInstallmentDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.installmentsService.remove(+id);
-  }
 }

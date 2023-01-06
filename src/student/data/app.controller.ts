@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Put, Delete, Req, HttpCode, ValidationPipe, Header, Redirect, Param, Body, ParseIntPipe } from "@nestjs/common"
+import { Controller, Post, Get, Put, Delete, Req, HttpCode, ValidationPipe, Header, Redirect, Param, Body, ParseIntPipe, Res } from "@nestjs/common"
 import { StudentService } from "./student.service"
 import { StudentDTO } from "./dto/student.dto";
 import { StudentPipe } from "./pipes/student.pipe";
@@ -11,24 +11,24 @@ export class StudentController {
     constructor(private StudentService: StudentService) { }
 
     @Post("/add")
-    addStudent(@Body(new ValidationPipe()) student: StudentDTO) {
-        return this.StudentService.addStudent(student);
+    addStudent(@Body(new ValidationPipe()) student: StudentDTO, @Req() req, @Res() res) {
+        return this.StudentService.addStudent(student, req, res);
     }
 
     @Get("/get")
-    async getStudent() {
-        return this.StudentService.getStudent();
+    async getStudent(@Req() req, @Res() res) {
+        return this.StudentService.getStudent(req, res);
     }
 
 
     @Put("/update")
-    updateStudent(@Body() student: StudentDTO) {
-        return this.StudentService.updateStudent(student);
+    updateStudent(@Body() student: StudentDTO, @Req() req, @Res() res) {
+        return this.StudentService.updateStudent(student, req, res);
     }
 
     @Delete("/delete")
-    deleteStudent(@Body() student: StudentDTO) {
-        return this.StudentService.deleteStudent(student);
+    deleteStudent(@Body() student: StudentDTO, @Req() req, @Res() res) {
+        return this.StudentService.deleteStudent(student, req, res);
     }
 
     @Get("/all")
@@ -42,5 +42,15 @@ export class StudentController {
     @Get("/find:id")
     findOne(@Param() params): string {
         return `This Will Return a #${params.id}`
+    }
+
+    @Get('/studentAndInst')
+    allStudentWithInstallment(@Body() student: StudentDTO, @Req() req, @Res() res) {
+        return this.StudentService.allStudentWithInstallment(student, req, res);
+    }
+
+    @Get('/search')
+    findBySearch(@Body() student: StudentDTO, @Req() req, @Res() res) {
+        return this.StudentService.findBySearch(student, req, res);
     }
 }
